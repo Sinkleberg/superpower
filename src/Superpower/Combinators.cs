@@ -667,6 +667,35 @@ namespace Superpower
         }
 
         /// <summary>
+        /// Construct a parser that matches zero or one instance of <paramref name="parser"/>, returning null when no match is possible.
+        /// </summary>
+        /// <typeparam name="TKind">The kind of the tokens being parsed.</typeparam>
+        /// <typeparam name="T">The reference type of value being parsed.</typeparam>
+        /// <param name="parser">The parser.</param>
+        /// <returns>The resulting parser.</returns>
+        public static TokenListParser<TKind, T?> OptionalOrNull<TKind, T>(this TokenListParser<TKind, T> parser)
+            where T : class
+        {
+            if (parser == null) throw new ArgumentNullException(nameof(parser));
+
+            return parser.Select(t => (T?)t).Or(Parse.Return<TKind, T?>(null));
+        }
+
+        /// <summary>
+        /// Construct a parser that matches zero or one instance of <paramref name="parser"/>, returning null when no match is possible.
+        /// </summary>
+        /// <typeparam name="T">The reference type of value being parsed.</typeparam>
+        /// <param name="parser">The parser.</param>
+        /// <returns>The resulting parser.</returns>
+        public static TextParser<T?> OptionalOrNull<T>(this TextParser<T> parser)
+            where T : class
+        {
+            if (parser == null) throw new ArgumentNullException(nameof(parser));
+
+            return parser.Select(t => (T?)t).Or(Parse.Return<T?>(null));
+        }
+
+        /// <summary>
         /// Construct a parser that matches zero or one instance of <paramref name="parser"/>, returning <paramref name="defaultValue"/> when
         /// no match is possible.
         /// </summary>

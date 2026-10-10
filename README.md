@@ -229,6 +229,21 @@ Benchmarks and results are included in the repository.
 
 **Tips:** if you find you need more throughput: 1) consider a hand-written tokenizer, and 2) avoid the use of LINQ comprehensions and instead use chained combinators like `Then()` and especially `IgnoreThen()` - these allocate fewer delegates (closures) during parsing.
 
+### Optional reference values
+
+Use `OptionalOrNull()` when an optional text or token parser returns a reference
+value. The resulting parser returns `null` when the parser does not match, with
+nullable reference annotations on its return type:
+
+```csharp
+TextParser<string?> optionalName = Identifier.CStyle.Text().OptionalOrNull();
+```
+
+For value types, use `Optional()` to obtain a nullable value. Use
+`OptionalOrDefault(value)` when you want an explicit fallback instead of `null`.
+As with these existing combinators, a partial match still fails; apply `Try()` to
+the inner parser when you want to allow backtracking.
+
 ### Examples
 
 Superpower is introduced, with a worked example, in [this blog post](https://nblumhardt.com/2016/09/superpower/).
